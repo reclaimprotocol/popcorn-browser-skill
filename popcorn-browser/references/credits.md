@@ -42,7 +42,10 @@ node scripts/credit-client.mjs call create_browser_session /private/create.json 
 ```
 
 Tool results are saved privately as `{isError,data,raw}`. On `insufficient_credit`,
-share the returned `data.next_action` checkout link with the user and pause.
+display the returned `data.next_action` checkout link at the top of the message
+as a bold, clickable link on its own line, and pause. Follow the main skill's
+prominent-link rule for every available checkout or live-view URL; if both are
+available, highlight both separately.
 The hosted product advertises $5 for 100 credits and one credit per ten-minute
 session; verify current terms before checkout. Do not purchase without authority.
 Retry the same arguments after funding. A timeout or operation-in-progress also
@@ -50,7 +53,13 @@ uses the same key. Stop after three attempts and investigate before reallocating
 Only a confirmed terminal failure asking for a new key permits a new operation.
 
 Read the exact `data.cdp_url` and attach Playwright to the existing context.
-Share `data.live_view_url` only with the user for login/MFA. Keep both private.
+Prominently display the exact `data.live_view_url` after creating or recovering
+a session. Whenever any step is blocked, highlight that link again only for the
+user, explain the blocker, and ask them to jump in and take the specific required
+action. This includes login/MFA and any other step needing human help. Follow
+the main skill's handoff rules: mark input pending, pause page actions, report
+the real expiry, and resume after the user hands control back. Keep both URLs
+private; the human receives the LiveView link, not the CDP connection URL.
 Use the discovered `get_browser_session`, `get_browser_connection`,
 `get_live_view`, `list_browser_sessions`, and `end_browser_session` tools with
 session-specific arguments in private files. `verify_runtime` requires a fresh,
