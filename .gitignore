@@ -1,0 +1,32 @@
+# Dependencies and caches
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Machine-specific agent configuration
+.agents/
+.codex/
+
+# Private credentials and runtime data (normally outside this repository)
+.env
+.env.*
+!.env.example
+credentials.json
+wallet.json
+state.json
+task.json
+activity.json
+watcher.json
+renewal.json
+tools.json
+*.args.json
+*.result.json
+*.log
+*.tmp
+.lock
+task.lock
+state.lock
+watcher.lock
+
+# Keep generated public distributions and package-lock.json tracked.

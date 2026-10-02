@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.zip -text
+popcorn-browser.md linguist-generated=true
+popcorn-browser.zip linguist-generated=true

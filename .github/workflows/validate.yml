@@ -1,0 +1,33 @@
+name: Validate skill
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify locked browser dependency
+        working-directory: popcorn-browser
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Check JavaScript syntax
+        run: |
+          node --check popcorn-browser/scripts/credit-client.mjs
+          node --check popcorn-browser/scripts/session.mjs
+      - name: Test session lifecycle without a live account
+        run: node tests/session.test.mjs
+      - name: Test GitHub packaging and standalone installation
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Reject stale committed distributions
+        run: python3 scripts/build_skill.py --check
